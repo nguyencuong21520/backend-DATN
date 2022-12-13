@@ -1,14 +1,25 @@
-import { HttpError } from "../common/HttpsError";
+import { responseApi } from "../common";
 import { AuthUser, AuthRequest } from "../common/AuthRequest";
 import { Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 
 const auth = (req: AuthRequest, res: Response, next: NextFunction) => {
   const authHeader = req.headers.authorization || "";
-  if (!authHeader) return next(new HttpError("Missing authentication", 401));
-  const [authType, authToken] = authHeader.split(" ", 2);
-  if (authType.toLowerCase() != "bearer")
-    return next(new HttpError(`${authType} is not supported yet!`, 401));
+  if (!authHeader)
+    return responseApi(res, 401, {
+      success: false,
+      response: {
+        message: "Missing authentication",
+      },
+    });
+  const [authType, authToken] = authHeader.split(" ", 2)  
+  if(authType.toLowerCase() != "bearer")
+    return responseApi(res, 401, {
+      success: false,
+      response: {
+        message: `${authType} is not supported yet!`,
+      },
+    });
   try {
     const secret = process.env.JWT_SECRET || "";
     const data = jwt.verify(authToken, secret) as AuthUser;
@@ -19,7 +30,12 @@ const auth = (req: AuthRequest, res: Response, next: NextFunction) => {
     };
     return next();
   } catch (error) {
-    return next(new HttpError("Invalid authentication!", 401));
+    return responseApi(res, 401, {
+      success: false,
+      response: {
+        message: error.message,
+      },
+    });
   }
 };
 

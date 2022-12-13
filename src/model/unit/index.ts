@@ -2,38 +2,16 @@ import { ObjectId } from "bson";
 import { COURCE_LEVEL, COURSE_TYPE, STATUS_COURSE } from "../../Enum";
 import { Obj } from "../../interface";
 
-export interface Unit {
-  _id: ObjectId;
-  unitName: string; // tiêu đề khóa học
-  lesson: {
-    _id: ObjectId;
-    lessonName: string; // tiêu đề bài học
-    lessonSource: string; // video bài học
-    type: COURSE_TYPE; // kiểu định dạng
-  }[];
-}
-[];
 
-export interface StudentEnroll {
-  _id: ObjectId;
-  time: Date;
-}
-[];
+
+
 class Course {
   public _id: ObjectId = null;
-  public nameCourse: string = null; // tên khóa học
-  public major: string = null; // bộ môn của khóa
-  public author: ObjectId = null; // tác giả
-  public img: string = null; // hình ảnh
-  public level: COURCE_LEVEL = null; // cấp độ của khóa học
-  public summaryCourse: string = null; // tóm tắt nội dung khóa học
-  public videoThumbnail: string = null; // video giới thiệu thumbnail
-  public comment: Obj[] | Record<string, unknown>[] = null; //  danh sách bình luận
-  public courses: Unit[] = null; // Các phần bài giảng của khóa học
-  public studentEnroll: StudentEnroll[] = null;
-  public createTime: Date = null;
-  public status: STATUS_COURSE = null;
+  public unitName: string = null;
+  public lesson: Obj[] = null;
+
   constructor(
+    un
     nameCourse: string | null,
     major: string | null,
     author: ObjectId | null,

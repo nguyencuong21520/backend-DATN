@@ -7,6 +7,10 @@ export enum STATUS_USER {
   AT = "ACTIVE",
   DAT = "DEACTIVE",
 }
+export enum STATUS_COURSE {
+  AT = "ACTIVE",
+  DAT = "DEACTIVE",
+}
 export enum COURCE_LEVEL {
   BASIC = "BASIC",
   ADVANCED = "ADVANCED",
