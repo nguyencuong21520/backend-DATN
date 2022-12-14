@@ -29,7 +29,7 @@ class Course {
   public summaryCourse: string = null; // tóm tắt nội dung khóa học
   public videoThumbnail: string = null; // video giới thiệu thumbnail
   public comment: Obj[] | Record<string, unknown>[] = null; //  danh sách bình luận
-  public courses: Unit[] = null; // Các phần bài giảng của khóa học
+  public unit: Unit[] = null; // Các phần bài giảng của khóa học
   public studentEnroll: StudentEnroll[] = null;
   public createTime: Date = null;
   public status: STATUS_COURSE = null;
@@ -40,7 +40,7 @@ class Course {
     img: string | null,
     summaryCourse: string | null,
     videoThumbnail: string | null,
-    courses: Unit[] | null,
+    unit: Unit[] | null,
     level: COURCE_LEVEL | null,
     comment: Obj[] | null,
     studentEnroll: StudentEnroll[] | null,
@@ -49,7 +49,7 @@ class Course {
   ) {
     this._id = new ObjectId();
     this.author = author;
-    this.courses = courses;
+    this.unit = unit;
     this.img = img;
     this.major = major;
     this.nameCourse = nameCourse;
@@ -69,7 +69,7 @@ class Course {
       document.img,
       document.summaryCourse,
       document.videoThumbnail,
-      document.courses,
+      document.unit,
       document.level,
       document.comment,
       document.studentEnroll,
@@ -87,7 +87,7 @@ class Course {
     img: string | null,
     summaryCourse: string | null,
     videoThumbnail: string | null,
-    courses: Unit[] | null,
+    unit: Unit[] | null,
     level: COURCE_LEVEL | null,
     comment: Obj[] | null,
     studentEnroll: StudentEnroll[] | null,
@@ -101,7 +101,7 @@ class Course {
       img,
       summaryCourse,
       videoThumbnail,
-      courses,
+      unit,
       level,
       comment,
       studentEnroll,

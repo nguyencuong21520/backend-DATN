@@ -1,92 +1,37 @@
 import { ObjectId } from "bson";
-import { COURCE_LEVEL, COURSE_TYPE, STATUS_COURSE } from "../../Enum";
 import { Obj } from "../../interface";
 
-
-
-
-class Course {
+class Unit {
   public _id: ObjectId = null;
   public unitName: string = null;
   public lesson: Obj[] = null;
+  public createTime: Date = null;
 
   constructor(
-    un
-    nameCourse: string | null,
-    major: string | null,
-    author: ObjectId | null,
-    img: string | null,
-    summaryCourse: string | null,
-    videoThumbnail: string | null,
-    courses: Unit[] | null,
-    level: COURCE_LEVEL | null,
-    comment: Obj[] | null,
-    studentEnroll: StudentEnroll[] | null,
-    createTime: Date | null,
-    status: STATUS_COURSE | null
+    unitName: string | null,
+    lesson: Obj[] = null,
+    createTime: Date | null
   ) {
     this._id = new ObjectId();
-    this.author = author;
-    this.courses = courses;
-    this.img = img;
-    this.major = major;
-    this.nameCourse = nameCourse;
-    this.summaryCourse = summaryCourse;
-    this.videoThumbnail = videoThumbnail;
-    this.level = level;
-    this.comment = comment;
-    this.studentEnroll = studentEnroll;
+    this.unitName = unitName;
+    this.lesson = lesson;
     this.createTime = createTime;
-    this.status = status;
   }
   static mapDataFromDocument(document: Obj) {
-    const course = new Course(
-      document.nameCourse,
-      document.major,
-      document.author,
-      document.img,
-      document.summaryCourse,
-      document.videoThumbnail,
-      document.courses,
-      document.level,
-      document.comment,
-      document.studentEnroll,
-      document.createTime,
-      document.status
+    const unit = new Unit(
+      document.unitName,
+      document.lesson,
+      document.createTime
     );
-    course._id = document._id;
+    unit._id = document._id;
 
-    return course;
+    return unit;
   }
-  static createCourse(
-    nameCourse: string | null,
-    major: string | null,
-    author: ObjectId | null,
-    img: string | null,
-    summaryCourse: string | null,
-    videoThumbnail: string | null,
-    courses: Unit[] | null,
-    level: COURCE_LEVEL | null,
-    comment: Obj[] | null,
-    studentEnroll: StudentEnroll[] | null,
-    createTime: Date | null,
-    status: STATUS_COURSE | null
-  ) {
-    const course = new Course(
-      nameCourse,
-      major,
-      author,
-      img,
-      summaryCourse,
-      videoThumbnail,
-      courses,
-      level,
-      comment,
-      studentEnroll,
-      createTime,
-      status
-    );
-    return course;
+  static create(unitName: string | null) {
+    const createTime = new Date();
+
+    const unit = new Unit(unitName, [], createTime);
+    return unit;
   }
 }
-export default Course;
+export { Unit };

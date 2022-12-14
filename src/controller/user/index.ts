@@ -4,8 +4,8 @@ import { responseApi } from "../../common";
 import { User } from "../../model/user";
 import { ROLE_USER, STATUS_USER } from "../../Enum/";
 
-
 import userRepositories, { OptionFind } from "../../repositories/user";
+import { info } from "console";
 
 const userController = {
   createUser: async (req: Request, res: Response) => {
@@ -91,6 +91,11 @@ const userController = {
         OptionFind.ID,
         authUser.id
       );
+      if (!result) {
+        throw new Error("User not found");
+      }
+      delete result.salt;
+      delete result.password;
       responseApi(res, 200, {
         success: true,
         response: {
@@ -128,11 +133,21 @@ const userController = {
         amount: quantityPerPage,
         status: STATUS_USER.AT,
       });
+
+      if (!usersList) {
+        throw new Error("Cannot Get Users");
+      }
+      const result = usersList.data.map((user) => {
+        delete user.salt;
+        delete user.password;
+        return user;
+      });
+
       responseApi(res, 200, {
         success: true,
         response: {
           message: "Get information success!",
-          data: usersList,
+          data: result,
         },
       });
     } catch (error) {

@@ -26,5 +26,20 @@ const courceRepositories = {
     client.close();
     return result;
   },
+  addUnitToCourse: async (id: string, data: ObjectId) => {
+    const client = await getClient();
+    const collection = client.db(DB).collection(DbCollections.course);
+    const result = await collection.updateOne(
+      { _id: new ObjectId(id) },
+      {
+        $push: {
+          unit: data,
+        },
+        $currentDate: { lastModified: true },
+      }
+    );
+    client.close();
+    return result;
+  },
 };
 export default courceRepositories;
