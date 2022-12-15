@@ -8,6 +8,10 @@ const lessonMiddleWare = {
       if (!idCourse) {
         throw new Error("Id course is required!");
       }
+      const {lessonName, source, type} = req.body
+      if(!lessonName || !source || !type) {
+        throw new Error("invalid information");
+      }
       next();
     } catch (error) {
       responseApi(res, 500, {

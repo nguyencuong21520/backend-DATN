@@ -7,18 +7,21 @@ class Lesson {
   public lessonName: string = null;
   public source: string = null;
   public type: COURSE_TYPE = null;
+  public author: string = null;
   public createTime: Date = null;
 
   constructor(
     lessonName: string | null,
     source: string = null,
     type: COURSE_TYPE = null,
+    author: string | null,
     createTime: Date | null
   ) {
     this._id = new ObjectId();
     this.lessonName = lessonName;
     this.source = source;
     this.type = type;
+    this.author = author;
     this.createTime = createTime;
   }
   static mapDataFromDocument(document: Obj) {
@@ -26,6 +29,7 @@ class Lesson {
       document.lessonName,
       document.source,
       document.type,
+      document.author,
       document.createTime
     );
     lesson._id = document._id;
@@ -34,10 +38,11 @@ class Lesson {
   static create(
     lessonName: string | null,
     source: string | null,
-    type: COURSE_TYPE | null
+    type: COURSE_TYPE | null,
+    author: string | null
   ) {
     const createTime = new Date();
-    const lesson = new Lesson(lessonName, source, type, createTime);
+    const lesson = new Lesson(lessonName, source, type, author, createTime);
     return lesson;
   }
 }

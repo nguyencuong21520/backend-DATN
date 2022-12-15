@@ -1,27 +1,26 @@
-import {  Response } from "express";
+import { Response } from "express";
 import { responseApi } from "../../common";
 import { AuthRequest } from "../../common/AuthRequest";
-import { ROLE_USER, STATUS_USER } from "../../Enum/";
 import { Lesson } from "../../model/lesson";
-import courceRepositories from "../../repositories/course";
+import unitRepositories from "../../repositories/unit";
 import courseService from "../../service/course";
 
 const lessonController = {
   create: async (req: AuthRequest, res: Response) => {
     try {
-      const idCourse = req.params.id;
+      const idUnit = req.params.id;
       const idUser = req.authUser.id;
-      const unitInfo = req.body;
+      const lessonInfo = req.body;
 
-      const course = await courceRepositories.getDrawCourse(idCourse);
-      if (!course) {
+      const unit = await unitRepositories.getDrawUnit(idUnit);
+      if (!unit) {
         throw new Error("Course not found");
       }
-      if (idUser != course.author) {
+      if (idUser != unit.author) {
         throw new Error("Permission denied");
       }
 
-      const result = await courseService.createUnit(idCourse, unitInfo);
+      const result = await courseService.createLesson(idUnit, idUser, lessonInfo);
 
       responseApi(res, 200, {
         success: true,

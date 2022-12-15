@@ -8,6 +8,10 @@ const unitMiddleWare = {
       if (!idCourse) {
         throw new Error("Id course is required!");
       }
+      const { unitName } = req.body;
+      if (!unitName) {
+        throw new Error("invalid information");
+      }
       next();
     } catch (error) {
       responseApi(res, 500, {
