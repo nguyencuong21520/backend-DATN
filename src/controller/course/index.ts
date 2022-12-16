@@ -5,6 +5,7 @@ import { ObjectId } from "bson";
 import { ROLE_USER, STATUS_COURSE } from "../../Enum/";
 import Course from "../../model/course";
 import courceRepositories from "../../repositories/course";
+import courseService from "../../service/course";
 
 const courceController = {
   create: async (req: AuthRequest, res: Response) => {
@@ -52,9 +53,81 @@ const courceController = {
       });
     }
   },
-  getCource: async (req: Request, res: Response) => {
+  getCourse: async (req: Request, res: Response) => {
     try {
-      const result = await courceRepositories.get();
+      const result = await courceRepositories.getAll(false);
+      responseApi(res, 200, {
+        success: true,
+        response: {
+          message: "Success!",
+          data: result,
+        },
+      });
+    } catch (error) {
+      responseApi(res, 500, {
+        success: false,
+        response: {
+          message: error.message,
+        },
+      });
+    }
+  },
+  getCourseAuth: async (req: AuthRequest, res: Response) => {
+    try {
+      const roleAuth = req.authUser.role;
+      const roleId = req.authUser.id;
+
+      if (!roleAuth) {
+        throw new Error("Missing user role");
+      }
+      if (!roleId) {
+        throw new Error("Missing user id");
+      }
+
+      let result = null;
+      if (roleAuth === ROLE_USER.AD) {
+        result = await courceRepositories.getAll(true);
+      }
+      if (roleAuth === ROLE_USER.ST || roleAuth === ROLE_USER.TC) {
+        result = await courseService.studentGetCourse(roleId);
+      }
+
+      responseApi(res, 200, {
+        success: true,
+        response: {
+          message: "Success!",
+          data: result,
+        },
+      });
+    } catch (error) {
+      responseApi(res, 500, {
+        success: false,
+        response: {
+          message: error.message,
+        },
+      });
+    }
+  },
+  mapDoneCourse: async (req: AuthRequest, res: Response) => {
+    try {
+      const roleAuth = req.authUser.role;
+      const roleId = req.authUser.id;
+
+      if (!roleAuth) {
+        throw new Error("Missing user role");
+      }
+      if (!roleId) {
+        throw new Error("Missing user id");
+      }
+
+      let result = null;
+      if (roleAuth === ROLE_USER.AD) {
+        result = await courceRepositories.getAll(true);
+      }
+      if (roleAuth === ROLE_USER.ST || roleAuth === ROLE_USER.TC) {
+        result = await courseService.studentGetCourse(roleId);
+      }
+
       responseApi(res, 200, {
         success: true,
         response: {

@@ -6,6 +6,7 @@ import { ObjectId } from "bson";
 import unitRepositories from "../../repositories/unit";
 import lessonRepositories from "../../repositories/lesson";
 import courceRepositories from "../../repositories/course";
+import userRepositories, { OptionFind } from "../../repositories/user";
 
 const courseService = {
   createUnit: async (idCourse: string, idAuthor: string, info: Obj) => {
@@ -53,6 +54,36 @@ const courseService = {
       throw new Error("Fail to create unit!");
     }
   },
+  studentGetCourse: async (idUser: string) => {
+    try {
+      const fullCourse = await courceRepositories.getAll(true);
+      const user = await userRepositories.findOneBySingleField(
+        OptionFind.ID,
+        idUser
+      );
+
+      const lessonDone = user.classEnrollment.map((lesson) => {
+        return lesson.toString();
+      });
+
+      const result = fullCourse.map((course) => {
+        if (lessonDone.includes(course._id.toString())) {
+          return { ...course, enroll: true };
+        } else {
+          return { ...course, enroll: false };
+        }
+      });
+      if(!result){
+        throw new Error("cant map course")
+      }
+
+
+      return result;
+    } catch {
+      throw new Error("Fail to get course!");
+    }
+  },
+  
 };
 
 export default courseService;

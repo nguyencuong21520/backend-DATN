@@ -33,6 +33,8 @@ class Course {
   public studentEnroll: StudentEnroll[] = null;
   public createTime: Date = null;
   public status: STATUS_COURSE = null;
+  public enroll: boolean = false;
+  public previewUnit: Obj[] = null;
   constructor(
     nameCourse: string | null,
     major: string | null,
@@ -45,7 +47,8 @@ class Course {
     comment: Obj[] | null,
     studentEnroll: StudentEnroll[] | null,
     createTime: Date | null,
-    status: STATUS_COURSE | null
+    status: STATUS_COURSE | null,
+    previewUnit: Obj[] | null
   ) {
     this._id = new ObjectId();
     this.author = author;
@@ -60,6 +63,7 @@ class Course {
     this.studentEnroll = studentEnroll;
     this.createTime = createTime;
     this.status = status;
+    this.previewUnit = previewUnit;
   }
   static mapDataFromDocument(document: Obj) {
     const course = new Course(
@@ -74,7 +78,8 @@ class Course {
       document.comment,
       document.studentEnroll,
       document.createTime,
-      document.status
+      document.status,
+      document.previewUnit
     );
     course._id = document._id;
 
@@ -106,7 +111,8 @@ class Course {
       comment,
       studentEnroll,
       createTime,
-      status
+      status,
+      []
     );
     return course;
   }

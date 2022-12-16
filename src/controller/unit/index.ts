@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
 import { responseApi } from "../../common";
 import { AuthRequest } from "../../common/AuthRequest";
-import Course from "../../model/course";
 import courceRepositories from "../../repositories/course";
 import courseService from "../../service/course";
 
