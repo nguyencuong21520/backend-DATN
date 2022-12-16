@@ -4,8 +4,7 @@ import { auth } from "../middleware/auth.middleware";
 const router: Router = Router();
 router.get("/", courceController.getCourse);
 router.get("/auth", auth, courceController.getCourseAuth);
-router.get("/auth/:id", auth, courceController.getCourseAuth);
-
+router.get("/auth/:id", auth, courceController.getCourseById);
 
 router.post("/create", auth, courceController.create);
 

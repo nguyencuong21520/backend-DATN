@@ -49,7 +49,6 @@ const userRepositories = {
     client.close();
     return result;
   },
-
   getUsers: async (conditions: conditionsSearch) => {
     const client = await getClient();
     const collection = client.db(DB).collection(DbCollections.user);
@@ -95,5 +94,21 @@ const userRepositories = {
     client.close();
     return result;
   },
+  addClassEnrollment: async (id: string, data: ObjectId) => {
+    const client = await getClient();
+    const collection = client.db(DB).collection(DbCollections.user);
+    const result = await collection.updateOne(
+      { _id: new ObjectId(id) },
+      {
+        $push: {
+          classEnrollment: data,
+        },
+        $currentDate: { lastModified: true },
+      }
+    );
+    client.close();
+    return result;
+  },
+
 };
 export default userRepositories;

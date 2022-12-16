@@ -13,13 +13,13 @@ const courceController = {
       const { major, nameCourse, img, summaryCourse, videoThumbnail, level } =
         req.body;
       const roleAuth = req.authUser.role;
-      const idAuth = new ObjectId(req.authUser.id);
+      const idAuth = req.authUser.id;
 
       if (roleAuth === ROLE_USER.TC || roleAuth === ROLE_USER.AD) {
         const course = Course.createCourse(
           nameCourse,
           major,
-          idAuth,
+          new ObjectId(idAuth) ,
           img,
           summaryCourse,
           videoThumbnail,
@@ -30,7 +30,7 @@ const courceController = {
           new Date(),
           STATUS_COURSE.AT
         );
-        const newCourse = await courceRepositories.create(course);
+        const newCourse = await courseService.createCourse(idAuth,course);
         if (!newCourse) {
           throw new Error("Đã có lỗi xảy ra");
         }
@@ -55,7 +55,7 @@ const courceController = {
   },
   getCourse: async (req: Request, res: Response) => {
     try {
-      const result = await courceRepositories.getAll(false);
+      const result = await courceRepositories.getAll(false, "");
       responseApi(res, 200, {
         success: true,
         response: {
@@ -86,10 +86,10 @@ const courceController = {
 
       let result = null;
       if (roleAuth === ROLE_USER.AD) {
-        result = await courceRepositories.getAll(true);
+        result = await courceRepositories.getAll(true, "");
       }
       if (roleAuth === ROLE_USER.ST || roleAuth === ROLE_USER.TC) {
-        result = await courseService.studentGetCourse(roleId);
+        result = await courseService.GetCourse(roleId);
       }
 
       responseApi(res, 200, {
@@ -108,10 +108,13 @@ const courceController = {
       });
     }
   },
-  mapDoneCourse: async (req: AuthRequest, res: Response) => {
+  getCourseById: async (req: AuthRequest, res: Response) => {
     try {
       const roleAuth = req.authUser.role;
       const roleId = req.authUser.id;
+      const courseId = req.params.id;
+
+      
 
       if (!roleAuth) {
         throw new Error("Missing user role");
@@ -119,13 +122,16 @@ const courceController = {
       if (!roleId) {
         throw new Error("Missing user id");
       }
+      if (!courseId) {
+        throw new Error("Missing course id");
+      }
 
       let result = null;
       if (roleAuth === ROLE_USER.AD) {
-        result = await courceRepositories.getAll(true);
+        result = await courseService.GetCourseById(roleId, courseId, true);
       }
       if (roleAuth === ROLE_USER.ST || roleAuth === ROLE_USER.TC) {
-        result = await courseService.studentGetCourse(roleId);
+        result = await courseService.GetCourseById(roleId, courseId, false);
       }
 
       responseApi(res, 200, {
