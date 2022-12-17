@@ -9,4 +9,10 @@ router.use("/api/course", courceRouter);
 router.use("/api/unit", unitRouter);
 router.use("/api/lesson", lessonRouter);
 
+router.use("/", (req, res, next) => {
+	res.json({
+		message: "Welcome to TLU_C",
+	});
+});
+
 export default router;
