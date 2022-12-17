@@ -71,6 +71,9 @@ const optionPipeline = (option) => {
         status: {
           $first: "$status",
         },
+        enroll:{
+          $first: "$enroll",
+        },
         lastModified: {
           $first: "$lastModified",
         },
@@ -139,6 +142,7 @@ const optionPipeline = (option) => {
         studentEnroll: 1,
         createTime: 1,
         status: 1,
+        enroll:1,
         lastModified: 1,
       },
     },
@@ -211,6 +215,9 @@ const optionPipeline = (option) => {
         status: {
           $first: "$status",
         },
+        enroll:{
+          $first: "$enroll",
+        },
         lastModified: {
           $first: "$lastModified",
         },
@@ -264,6 +271,7 @@ const optionPipeline = (option) => {
         studentEnroll: 1,
         createTime: 1,
         status: 1,
+        enroll:1,
         lastModified: 1,
       },
     },
