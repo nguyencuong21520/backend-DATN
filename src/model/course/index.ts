@@ -14,11 +14,8 @@ export interface Unit {
 }
 [];
 
-export interface StudentEnroll {
-  _id: ObjectId;
-  time: Date;
-}
-[];
+
+
 class Course {
   public _id: ObjectId = null;
   public nameCourse: string = null; // tên khóa học
@@ -28,9 +25,7 @@ class Course {
   public level: COURCE_LEVEL = null; // cấp độ của khóa học
   public summaryCourse: string = null; // tóm tắt nội dung khóa học
   public videoThumbnail: string = null; // video giới thiệu thumbnail
-  public comment: Obj[] | Record<string, unknown>[] = null; //  danh sách bình luận
   public unit: Unit[] = null; // Các phần bài giảng của khóa học
-  public studentEnroll: StudentEnroll[] = null;
   public createTime: Date = null;
   public status: STATUS_COURSE = null;
   public enroll: boolean = false;
@@ -44,8 +39,6 @@ class Course {
     videoThumbnail: string | null,
     unit: Unit[] | null,
     level: COURCE_LEVEL | null,
-    comment: Obj[] | null,
-    studentEnroll: StudentEnroll[] | null,
     createTime: Date | null,
     status: STATUS_COURSE | null,
     previewUnit: Obj[] | null
@@ -59,8 +52,6 @@ class Course {
     this.summaryCourse = summaryCourse;
     this.videoThumbnail = videoThumbnail;
     this.level = level;
-    this.comment = comment;
-    this.studentEnroll = studentEnroll;
     this.createTime = createTime;
     this.status = status;
     this.previewUnit = previewUnit;
@@ -75,8 +66,6 @@ class Course {
       document.videoThumbnail,
       document.unit,
       document.level,
-      document.comment,
-      document.studentEnroll,
       document.createTime,
       document.status,
       document.previewUnit
@@ -94,8 +83,6 @@ class Course {
     videoThumbnail: string | null,
     unit: Unit[] | null,
     level: COURCE_LEVEL | null,
-    comment: Obj[] | null,
-    studentEnroll: StudentEnroll[] | null,
     createTime: Date | null,
     status: STATUS_COURSE | null
   ) {
@@ -108,8 +95,6 @@ class Course {
       videoThumbnail,
       unit,
       level,
-      comment,
-      studentEnroll,
       createTime,
       status,
       []

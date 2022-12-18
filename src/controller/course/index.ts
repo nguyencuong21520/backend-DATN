@@ -25,8 +25,6 @@ const courceController = {
           videoThumbnail,
           [],
           level,
-          [],
-          [],
           new Date(),
           STATUS_COURSE.AT
         );

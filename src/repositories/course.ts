@@ -257,9 +257,6 @@ const optionPipeline = (option) => {
           _id: 1,
           username: 1,
           img: 1,
-          email: 1,
-          phone: 1,
-          role: 1,
           status: 1,
         },
         unit: [],
@@ -278,7 +275,6 @@ const optionPipeline = (option) => {
   ];
   return option ? pipelineFullAccess : pipeline;
 };
-
 const courceRepositories = {
   create: async (cource: Cource) => {
     const client = await getClient();

@@ -6,6 +6,8 @@ enum DbCollections {
   course = "courses",
   lesson = "lesson",
   unit = "unit",
+  enroll = "enroll",
+  comment = "comment",
 }
 
 function getClient(): Promise<MongoClient> {

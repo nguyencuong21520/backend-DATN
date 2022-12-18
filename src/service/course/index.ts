@@ -2,10 +2,13 @@ import { Obj } from "../../interface";
 import { Lesson } from "../../model/lesson";
 import { Unit } from "../../model/unit";
 import { ObjectId } from "bson";
+import { uuid } from "../../common";
 
 import unitRepositories from "../../repositories/unit";
 import lessonRepositories from "../../repositories/lesson";
 import courceRepositories from "../../repositories/course";
+import enrollRepositories from "../../repositories/enroll";
+import commentRepositories from "../../repositories/comment";
 import userRepositories, { OptionFind } from "../../repositories/user";
 
 const mapDoneCourse = (course, user) => {
@@ -32,14 +35,14 @@ const mapDoneCourse = (course, user) => {
 };
 
 const courseService = {
-  createCourse: async (idUser: string,info: any) => {
+  createCourse: async (idUser: string, info: any) => {
     try {
       const createCourse = await courceRepositories.create(info);
       if (!createCourse) {
         throw new Error("Fail to create course!");
       }
-      const currentIdCourse = createCourse.insertedId;
 
+      const currentIdCourse = createCourse.insertedId;
       const addClassEnrollment = await userRepositories.addClassEnrollment(
         idUser,
         new ObjectId(currentIdCourse)
@@ -47,8 +50,30 @@ const courseService = {
       if (!addClassEnrollment) {
         throw new Error("Update class enrollment failed!");
       }
+
+      const enroll = {
+        idClass: new ObjectId(currentIdCourse),
+        student: [{ userId: new ObjectId(idUser), time: new Date() }],
+      };
+
+      const comment = {
+        idComment: new ObjectId(currentIdCourse),
+        comment: [],
+      };
+      const createEnroll = await enrollRepositories.create(enroll);
+      if (!createEnroll) {
+        throw new Error("Fail to create Enroll!");
+      }
+      const createComment = await commentRepositories.create(comment);
+      if (!createComment) {
+        throw new Error("Fail to create comment!");
+      }
+
       return createCourse;
-    } catch {
+    } catch (error) {
+      if (error) {
+        throw new Error(error.message);
+      }
       throw new Error("Fail to create course!");
     }
   },
@@ -145,17 +170,40 @@ const courseService = {
       if (!user) {
         throw new Error("Cant get user");
       }
-      const classEnrollment = user.classEnrollment.map((lesson) => {
-        return lesson.toString();
+
+      const studentEnrollId = fullCourse[0]._id;
+
+      const studentEnroll = await enrollRepositories.getAll(studentEnrollId);
+      const comment = await commentRepositories.getAll(studentEnrollId);
+      const classEnrollment = user.classEnrollment.map((course) => {
+        return course.toString();
       });
 
       if (classEnrollment.includes(fullCourse[0]._id.toString()) || access) {
         const courseMapDone = mapDoneCourse(fullCourse, user);
-        return [{ ...courseMapDone[0], enroll: true }];
+        return [
+          {
+            ...courseMapDone[0],
+            enroll: true,
+            student: studentEnroll[0],
+            comment: comment[0],
+          },
+        ];
       } else {
-        return [{ ...fullCourse[0], enroll: false, unit: [] }];
+        return [
+          {
+            ...fullCourse[0],
+            enroll: false,
+            unit: [],
+            student: [],
+            comment: comment[0],
+          },
+        ];
       }
-    } catch {
+    } catch (error) {
+      if (error) {
+        throw new Error(error.message);
+      }
       throw new Error("Fail to get course!");
     }
   },
