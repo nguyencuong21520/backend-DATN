@@ -26,14 +26,14 @@ class App {
         origin: [process.env.CLIENT_DOMAIN, process.env.CLIENT_HOST],
       })
     );
+    this.app.use("/static",express.static(path.join(__dirname, "../scorm")));
+    
   }
   private setupRouter() {
     this.app.use(router);
   }
 
-  // public publicFile() {
-  //   this.app.use(express.static("../scorm"));
-  // }
+
 
   public listen() {
     // this.app.use("/static", express.static(path.join(__dirname, "public")));
