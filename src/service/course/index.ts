@@ -277,6 +277,30 @@ const courseService = {
       throw new Error("Fail to create course!");
     }
   },
+  addEnroll: async (courseId: string, studentId: string) => {
+    try {
+      await userRepositories.addClass(
+        studentId,
+        new ObjectId(courseId),
+        "classEnrollment"
+      );
+      const result = await enrollRepositories.addEnroll(courseId, studentId);
+
+      const enrollInfo = {
+        userId: new ObjectId(studentId),
+        time: new Date(),
+        access: true,
+      };
+      await enrollRepositories.addEnrollWaiting(courseId, enrollInfo);
+
+      return result;
+    } catch (error) {
+      if (error) {
+        throw new Error(error.message);
+      }
+      throw new Error("Fail to create course!");
+    }
+  },
 };
 
 export default courseService;

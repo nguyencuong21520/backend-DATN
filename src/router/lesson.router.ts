@@ -11,4 +11,7 @@ router.post(
   lessonController.create
 );
 
+router.put("/update/:id", auth, lessonController.update);
+router.delete("/delete/:id", auth, lessonController.update);
+
 export default router;

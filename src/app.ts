@@ -1,4 +1,6 @@
 import create_app, { Application, json } from "express";
+const express = require("express");
+const path = require("path");
 import cors from "cors";
 import router from "./router";
 
@@ -28,7 +30,13 @@ class App {
   private setupRouter() {
     this.app.use(router);
   }
+
+  // public publicFile() {
+  //   this.app.use(express.static("../scorm"));
+  // }
+
   public listen() {
+    // this.app.use("/static", express.static(path.join(__dirname, "public")));
     this.app.listen(this.port, () => {
       console.log(`${this.name} is running on port ${this.port}`);
     });

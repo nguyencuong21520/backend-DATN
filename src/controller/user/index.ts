@@ -5,7 +5,7 @@ import { User } from "../../model/user";
 import { ROLE_USER, STATUS_USER } from "../../Enum/";
 
 import userRepositories, { OptionFind } from "../../repositories/user";
-import { info } from "console";
+
 
 const userController = {
   createUser: async (req: Request, res: Response) => {
@@ -224,5 +224,6 @@ const userController = {
       });
     }
   },
+  
 };
 export default userController;

@@ -5,5 +5,6 @@ import { auth } from "../middleware/auth.middleware";
 const router: Router = Router();
 
 router.post("/create/:id", unitMiddleWare.create, auth, unitController.create);
+router.put("/update/:id", auth, unitController.update);
 
 export default router;

@@ -10,6 +10,8 @@ router.post("/create", auth, courceController.create);
 router.put("/enroll/:id", auth, courceController.enroll);
 router.put("/accept/:id", auth, courceController.acceptEnroll);
 router.put("/remove/:id", auth, courceController.removenroll);
+router.put("/addEnroll/:id", auth, courceController.addEnroll);
+
 
 
 
