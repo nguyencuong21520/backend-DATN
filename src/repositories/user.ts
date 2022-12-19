@@ -94,14 +94,14 @@ const userRepositories = {
     client.close();
     return result;
   },
-  addClassEnrollment: async (id: string, data: ObjectId) => {
+  addClass: async (id: string, data: ObjectId, option: string) => {
     const client = await getClient();
     const collection = client.db(DB).collection(DbCollections.user);
     const result = await collection.updateOne(
       { _id: new ObjectId(id) },
       {
         $push: {
-          classEnrollment: data,
+          [option]: data,
         },
         $currentDate: { lastModified: true },
       }
@@ -109,6 +109,20 @@ const userRepositories = {
     client.close();
     return result;
   },
-
+  removeClass: async (id: string, data: ObjectId, option: string) => {
+    const client = await getClient();
+    const collection = client.db(DB).collection(DbCollections.user);
+    const result = await collection.updateOne(
+      { _id: new ObjectId(id) },
+      {
+        $pull: {
+          [option]: data,
+        },
+        $currentDate: { lastModified: true },
+      }
+    );
+    client.close();
+    return result;
+  },
 };
 export default userRepositories;

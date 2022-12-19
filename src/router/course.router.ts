@@ -7,5 +7,8 @@ router.get("/auth", auth, courceController.getCourseAuth);
 router.get("/auth/:id", auth, courceController.getCourseById);
 
 router.post("/create", auth, courceController.create);
+router.put("/enroll/:id", auth, courceController.enroll);
+router.put("/accept/:id", auth, courceController.acceptEnroll);
+
 
 export default router;

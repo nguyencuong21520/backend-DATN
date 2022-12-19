@@ -19,7 +19,7 @@ const courceController = {
         const course = Course.createCourse(
           nameCourse,
           major,
-          new ObjectId(idAuth) ,
+          new ObjectId(idAuth),
           img,
           summaryCourse,
           videoThumbnail,
@@ -28,9 +28,9 @@ const courceController = {
           new Date(),
           STATUS_COURSE.AT
         );
-        const newCourse = await courseService.createCourse(idAuth,course);
+        const newCourse = await courseService.createCourse(idAuth, course);
         if (!newCourse) {
-          throw new Error("Đã có lỗi xảy ra");
+          throw new Error("Something went wrong");
         }
         responseApi(res, 200, {
           success: true,
@@ -112,8 +112,6 @@ const courceController = {
       const roleId = req.authUser.id;
       const courseId = req.params.id;
 
-      
-
       if (!roleAuth) {
         throw new Error("Missing user role");
       }
@@ -137,6 +135,76 @@ const courceController = {
         response: {
           message: "Success!",
           data: result,
+        },
+      });
+    } catch (error) {
+      responseApi(res, 500, {
+        success: false,
+        response: {
+          message: error.message,
+        },
+      });
+    }
+  },
+  enroll: async (req: AuthRequest, res: Response) => {
+    try {
+      const userId = req.authUser.id;
+      const courseId = req.params.id;
+
+      if (!courseId) {
+        throw new Error(`Course id is required`);
+      }
+      const course = await courceRepositories.getDrawCourse(courseId);
+      if (!course) {
+        throw new Error("Course not found");
+      }
+      const result = await courseService.enrollWaiting(userId, courseId);
+      responseApi(res, 200, {
+        success: true,
+        response: {
+          message: "Created Cource!",
+          data: result,
+        },
+      });
+    } catch (error) {
+      responseApi(res, 500, {
+        success: false,
+        response: {
+          message: error.message,
+        },
+      });
+    }
+  },
+  acceptEnroll: async (req: AuthRequest, res: Response) => {
+    try {
+      const userId = req.authUser.id;
+      const userRole = req.authUser.role;
+      const courseId = req.params.id;
+      const studentId = req.body.studentId;
+      if (!courseId || !studentId || !userId || !userRole) {
+        throw new Error("Missing information");
+      }
+      const course = await courceRepositories.getDrawCourse(courseId);
+      if (!course) {
+        throw new Error("Course not found");
+      }
+      if (userId != course.author && userRole != ROLE_USER.AD) {
+        throw new Error("Permission denied");
+      }
+
+      const newCourse = await courseService.acceptEnroll(
+        userId,
+        courseId,
+        studentId
+      );
+      if (!newCourse) {
+        throw new Error("Something went wrong");
+      }
+      responseApi(res, 200, {
+        success: true,
+        response: {
+          message: "Created Cource!",
+          data: newCourse,
         },
       });
     } catch (error) {

@@ -28,6 +28,7 @@ const pipeline = [
             $first: "$alo",
           },
           time: "$student.time",
+          access: "$student.access",
         },
       },
     },
@@ -48,6 +49,7 @@ const pipeline = [
           lastModified: 1,
         },
         time: 1,
+        access: 1,
       },
     },
   },
@@ -74,6 +76,35 @@ const enrollRepositories = {
         ...pipeline,
       ])
       .toArray();
+    client.close();
+    return result;
+  },
+  addEnrollWaiting: async (id: string, info: any) => {
+    const client = await getClient();
+    const collection = client.db(DB).collection(DbCollections.enroll);
+
+    const result = await collection.updateOne(
+      { idClass: new ObjectId(id) },
+      {
+        $push: {
+          student: info,
+        },
+        $currentDate: { lastModified: true },
+      }
+    );
+    client.close();
+    return result;
+  },
+  addEnroll: async (id: string, studentId: string) => {
+    const client = await getClient();
+    const collection = client.db(DB).collection(DbCollections.enroll);
+    const result = await collection.updateOne(
+      { idClass: new ObjectId(id), "student.userId": new ObjectId(studentId) },
+      {
+        $set: { "student.$.access": true },
+        $currentDate: { lastModified: true },
+      }
+    );
     client.close();
     return result;
   },

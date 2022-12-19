@@ -43,9 +43,10 @@ const courseService = {
       }
 
       const currentIdCourse = createCourse.insertedId;
-      const addClassEnrollment = await userRepositories.addClassEnrollment(
+      const addClassEnrollment = await userRepositories.addClass(
         idUser,
-        new ObjectId(currentIdCourse)
+        new ObjectId(currentIdCourse),
+        "classEnrollment"
       );
       if (!addClassEnrollment) {
         throw new Error("Update class enrollment failed!");
@@ -53,7 +54,9 @@ const courseService = {
 
       const enroll = {
         idClass: new ObjectId(currentIdCourse),
-        student: [{ userId: new ObjectId(idUser), time: new Date() }],
+        student: [
+          { userId: new ObjectId(idUser), time: new Date(), access: true },
+        ],
       };
 
       const comment = {
@@ -205,6 +208,56 @@ const courseService = {
         throw new Error(error.message);
       }
       throw new Error("Fail to get course!");
+    }
+  },
+  enrollWaiting: async (idUser: string, courseId: string) => {
+    try {
+      const enrollInfo = {
+        userId: new ObjectId(idUser),
+        time: new Date(),
+        access: false,
+      };
+      const enroll = await enrollRepositories.addEnrollWaiting(
+        courseId,
+        enrollInfo
+      );
+      if (!enroll) {
+        throw new Error("Fail to add Enroll Waiting");
+      }
+      const addClassWaiting = await userRepositories.addClass(
+        idUser,
+        new ObjectId(courseId),
+        "classWaiting"
+      );
+
+      return enroll;
+    } catch (error) {
+      if (error) {
+        throw new Error(error.message);
+      }
+      throw new Error("Fail to create course!");
+    }
+  },
+  acceptEnroll: async (idUser: string, courseId: string, studentId: string) => {
+    try {
+      await userRepositories.addClass(
+        studentId,
+        new ObjectId(courseId),
+        "classEnrollment"
+      );
+      await userRepositories.removeClass(
+        studentId,
+        new ObjectId(courseId),
+        "classWaiting"
+      );
+      const result = await enrollRepositories.addEnroll(courseId, studentId);
+
+      return result;
+    } catch (error) {
+      if (error) {
+        throw new Error(error.message);
+      }
+      throw new Error("Fail to create course!");
     }
   },
 };
