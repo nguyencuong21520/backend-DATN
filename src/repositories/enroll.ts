@@ -108,5 +108,18 @@ const enrollRepositories = {
     client.close();
     return result;
   },
+  removeEnroll: async (id: string, studentId: string) => {
+    const client = await getClient();
+    const collection = client.db(DB).collection(DbCollections.enroll);
+    const result = await collection.updateOne(
+      { idClass: new ObjectId(id) },
+      {
+        $pull: { student: { userId: new ObjectId(studentId) } },
+        $currentDate: { lastModified: true },
+      }
+    );
+    client.close();
+    return result;
+  },
 };
 export default enrollRepositories;

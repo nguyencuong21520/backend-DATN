@@ -238,7 +238,7 @@ const courseService = {
       throw new Error("Fail to create course!");
     }
   },
-  acceptEnroll: async (idUser: string, courseId: string, studentId: string) => {
+  acceptEnroll: async (courseId: string, studentId: string) => {
     try {
       await userRepositories.addClass(
         studentId,
@@ -251,6 +251,23 @@ const courseService = {
         "classWaiting"
       );
       const result = await enrollRepositories.addEnroll(courseId, studentId);
+
+      return result;
+    } catch (error) {
+      if (error) {
+        throw new Error(error.message);
+      }
+      throw new Error("Fail to create course!");
+    }
+  },
+  removeEnroll: async (courseId: string, studentId: string) => {
+    try {
+      await userRepositories.removeClass(
+        studentId,
+        new ObjectId(courseId),
+        "classEnrollment"
+      );
+      const result = await enrollRepositories.removeEnroll(courseId, studentId);
 
       return result;
     } catch (error) {

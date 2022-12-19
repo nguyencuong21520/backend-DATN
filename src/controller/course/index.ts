@@ -193,7 +193,46 @@ const courceController = {
       }
 
       const newCourse = await courseService.acceptEnroll(
-        userId,
+        courseId,
+        studentId
+      );
+      if (!newCourse) {
+        throw new Error("Something went wrong");
+      }
+      responseApi(res, 200, {
+        success: true,
+        response: {
+          message: "Created Cource!",
+          data: newCourse,
+        },
+      });
+    } catch (error) {
+      responseApi(res, 500, {
+        success: false,
+        response: {
+          message: error.message,
+        },
+      });
+    }
+  },
+  removenroll: async (req: AuthRequest, res: Response) => {
+    try {
+      const userId = req.authUser.id;
+      const userRole = req.authUser.role;
+      const courseId = req.params.id;
+      const studentId = req.body.studentId;
+      if (!courseId || !studentId || !userId || !userRole) {
+        throw new Error("Missing information");
+      }
+      const course = await courceRepositories.getDrawCourse(courseId);
+      if (!course) {
+        throw new Error("Course not found");
+      }
+      if (userId != course.author && userRole != ROLE_USER.AD) {
+        throw new Error("Permission denied");
+      }
+
+      const newCourse = await courseService.removeEnroll(
         courseId,
         studentId
       );
