@@ -145,9 +145,15 @@ const courseService = {
         return lesson.toString();
       });
 
+      const classWaiting = user.classWaiting.map((lesson) => {
+        return lesson.toString();
+      });
+
       const result = fullCourse.map((course) => {
         if (classEnrollment.includes(course._id.toString())) {
           return { ...course, enroll: true };
+        } else if (classWaiting.includes(course._id.toString())) {
+          return { ...course, enroll: "waiting", unit: [] };
         } else {
           return { ...course, enroll: false, unit: [] };
         }
@@ -182,6 +188,10 @@ const courseService = {
         return course.toString();
       });
 
+      const classWaiting = user.classWaiting.map((lesson) => {
+        return lesson.toString();
+      });
+
       if (classEnrollment.includes(fullCourse[0]._id.toString()) || access) {
         const courseMapDone = mapDoneCourse(fullCourse, user);
         return [
@@ -189,6 +199,16 @@ const courseService = {
             ...courseMapDone[0],
             enroll: true,
             student: studentEnroll[0],
+            comment: comment[0],
+          },
+        ];
+      } else if (classWaiting.includes(fullCourse[0]._id.toString())) {
+        return [
+          {
+            ...fullCourse[0],
+            enroll: "waiting",
+            unit: [],
+            student: [],
             comment: comment[0],
           },
         ];
