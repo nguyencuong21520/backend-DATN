@@ -5,7 +5,7 @@ import { User } from "../../model/user";
 import { ROLE_USER, STATUS_USER } from "../../Enum/";
 
 import userRepositories, { OptionFind } from "../../repositories/user";
-
+import { ObjectId } from "bson";
 
 const userController = {
   createUser: async (req: Request, res: Response) => {
@@ -198,6 +198,33 @@ const userController = {
       });
     }
   },
+  addLessonDone: async (req: AuthRequest, res: Response) => {
+    try {
+      const idAuth = req.authUser.id;
+      const { lessonId } = req.body;
+
+      const result = await userRepositories.addClass(
+        idAuth,
+        new ObjectId(lessonId),
+        "lessonDone"
+      );
+
+      responseApi(res, 200, {
+        success: true,
+        response: {
+          message: "User update success!",
+          data: result,
+        },
+      });
+    } catch (error) {
+      responseApi(res, 502, {
+        success: false,
+        response: {
+          message: error.message,
+        },
+      });
+    }
+  },
   deleteUser: async (req: AuthRequest, res: Response) => {
     try {
       const roleAuth = req.authUser.role;
@@ -224,6 +251,5 @@ const userController = {
       });
     }
   },
-  
 };
 export default userController;

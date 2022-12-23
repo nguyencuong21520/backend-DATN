@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon index.ts",
-    "start":"ts-node index.ts"
+    "start": "ts-node index.ts"
   },
   "author": "",
   "license": "ISC",
@@ -23,10 +23,13 @@
   "dependencies": {
     "bson": "^4.7.0",
     "cors": "^2.8.5",
+    "decompress": "^4.2.1",
     "dotenv": "^16.0.3",
     "jsonwebtoken": "^8.5.1",
     "mongodb": "^4.12.1",
     "mongoose": "^6.7.3",
+    "path": "^0.12.7",
+    "rimraf": "^3.0.2",
     "uuid": "^9.0.0"
   }
 }
