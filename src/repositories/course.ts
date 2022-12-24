@@ -62,9 +62,6 @@ const optionPipeline = (option) => {
         comment: {
           $first: "$comment",
         },
-        studentEnroll: {
-          $first: "$studentEnroll",
-        },
         createTime: {
           $first: "$createTime",
         },
@@ -73,6 +70,9 @@ const optionPipeline = (option) => {
         },
         enroll:{
           $first: "$enroll",
+        },
+        major:{
+          $first: "$major",
         },
         lastModified: {
           $first: "$lastModified",
@@ -139,10 +139,10 @@ const optionPipeline = (option) => {
         summaryCourse: 1,
         videoThumbnail: 1,
         comment: 1,
-        studentEnroll: 1,
         createTime: 1,
         status: 1,
         enroll:1,
+        major: 1,
         lastModified: 1,
       },
     },
@@ -206,9 +206,6 @@ const optionPipeline = (option) => {
         comment: {
           $first: "$comment",
         },
-        studentEnroll: {
-          $first: "$studentEnroll",
-        },
         createTime: {
           $first: "$createTime",
         },
@@ -217,6 +214,9 @@ const optionPipeline = (option) => {
         },
         enroll:{
           $first: "$enroll",
+        },
+        major:{
+          $first: "$major",
         },
         lastModified: {
           $first: "$lastModified",
@@ -265,7 +265,7 @@ const optionPipeline = (option) => {
         summaryCourse: 1,
         videoThumbnail: 1,
         comment: 1,
-        studentEnroll: 1,
+        major: 1,
         createTime: 1,
         status: 1,
         enroll:1,

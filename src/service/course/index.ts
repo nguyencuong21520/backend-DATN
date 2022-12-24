@@ -230,6 +230,70 @@ const courseService = {
       throw new Error("Fail to get course!");
     }
   },
+  GetAllAuth: async (idUser: string, idCoure: string, access: boolean) => {
+    try {
+      const fullCourse = await courceRepositories.getAll(true, "");
+      const user = await userRepositories.findOneBySingleField(
+        OptionFind.ID,
+        idUser
+      );
+      if (!fullCourse) {
+        throw new Error("Cant get course");
+      }
+      if (!user) {
+        throw new Error("Cant get user");
+      }
+
+      const studentEnrollId = fullCourse[0]._id;
+
+      const studentEnroll = await enrollRepositories.getAll(studentEnrollId);
+      const comment = await commentRepositories.getAll(studentEnrollId);
+      const classEnrollment = user.classEnrollment.map((course) => {
+        return course.toString();
+      });
+
+      const classWaiting = user.classWaiting.map((lesson) => {
+        return lesson.toString();
+      });
+
+      if (classEnrollment.includes(fullCourse[0]._id.toString()) || access) {
+        const courseMapDone = mapDoneCourse(fullCourse, user);
+        return [
+          {
+            ...courseMapDone[0],
+            enroll: true,
+            student: studentEnroll[0],
+            comment: comment[0],
+          },
+        ];
+      } else if (classWaiting.includes(fullCourse[0]._id.toString())) {
+        return [
+          {
+            ...fullCourse[0],
+            enroll: "waiting",
+            unit: [],
+            student: [],
+            comment: comment[0],
+          },
+        ];
+      } else {
+        return [
+          {
+            ...fullCourse[0],
+            enroll: false,
+            unit: [],
+            student: [],
+            comment: comment[0],
+          },
+        ];
+      }
+    } catch (error) {
+      if (error) {
+        throw new Error(error.message);
+      }
+      throw new Error("Fail to get course!");
+    }
+  },
   enrollWaiting: async (idUser: string, courseId: string) => {
     try {
       const enrollInfo = {
