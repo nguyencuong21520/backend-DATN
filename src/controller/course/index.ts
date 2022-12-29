@@ -192,17 +192,14 @@ const courceController = {
         throw new Error("Permission denied");
       }
 
-      const newCourse = await courseService.acceptEnroll(
-        courseId,
-        studentId
-      );
+      const newCourse = await courseService.acceptEnroll(courseId, studentId);
       if (!newCourse) {
         throw new Error("Something went wrong");
       }
       responseApi(res, 200, {
         success: true,
         response: {
-          message: "Created Cource!",
+          message: "Acepted!",
           data: newCourse,
         },
       });
@@ -232,10 +229,7 @@ const courceController = {
         throw new Error("Permission denied");
       }
 
-      const newCourse = await courseService.removeEnroll(
-        courseId,
-        studentId
-      );
+      const newCourse = await courseService.removeEnroll(courseId, studentId);
       if (!newCourse) {
         throw new Error("Something went wrong");
       }
@@ -272,10 +266,7 @@ const courceController = {
         throw new Error("Permission denied");
       }
 
-      const newCourse = await courseService.addEnroll(
-        courseId,
-        studentId
-      );
+      const newCourse = await courseService.addEnroll(courseId, studentId);
       if (!newCourse) {
         throw new Error("Something went wrong");
       }

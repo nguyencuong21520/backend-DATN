@@ -351,6 +351,11 @@ const courseService = {
         new ObjectId(courseId),
         "classEnrollment"
       );
+      await userRepositories.removeClass(
+        studentId,
+        new ObjectId(courseId),
+        "classWaiting"
+      );
       const result = await enrollRepositories.removeEnroll(courseId, studentId);
 
       return result;
@@ -358,7 +363,7 @@ const courseService = {
       if (error) {
         throw new Error(error.message);
       }
-      throw new Error("Fail to create course!");
+      throw new Error("Remove or Reject failed!");
     }
   },
   addEnroll: async (courseId: string, studentId: string) => {
