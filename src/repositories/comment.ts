@@ -1,5 +1,7 @@
 import { DB, DbCollections, getClient } from "../database";
 
+import { ObjectId } from "bson";
+
 const pipeline = [
   {
     $unwind: {
@@ -74,6 +76,22 @@ const commentRepositories = {
         ...pipeline,
       ])
       .toArray();
+    client.close();
+    return result;
+  },
+  addComment: async (id: string, info: any) => {
+    const client = await getClient();
+    const collection = client.db(DB).collection(DbCollections.comment);
+
+    const result = await collection.updateOne(
+      { idComment: new ObjectId(id) },
+      {
+        $push: {
+          comment: info,
+        },
+        $currentDate: { lastModified: true },
+      }
+    );
     client.close();
     return result;
   },

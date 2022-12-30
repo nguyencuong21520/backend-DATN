@@ -5,7 +5,9 @@ import { ObjectId } from "bson";
 import { ROLE_USER, STATUS_COURSE } from "../../Enum/";
 import Course from "../../model/course";
 import courceRepositories from "../../repositories/course";
+import userRepositories, { OptionFind } from "../../repositories/user";
 import courseService from "../../service/course";
+import commentRepositories from "../../repositories/comment";
 
 const courceController = {
   create: async (req: AuthRequest, res: Response) => {
@@ -275,6 +277,57 @@ const courceController = {
         response: {
           message: "Created Cource!",
           data: newCourse,
+        },
+      });
+    } catch (error) {
+      responseApi(res, 500, {
+        success: false,
+        response: {
+          message: error.message,
+        },
+      });
+    }
+  },
+  addComment: async (req: AuthRequest, res: Response) => {
+    try {
+      const userId = req.authUser.id;
+      const courseId = req.params.id;
+      const comment = req.body.comment;
+      if (!courseId || !courseId || !comment) {
+        throw new Error("Missing information");
+      }
+
+      const user = await userRepositories.findOneBySingleField(
+        OptionFind.ID,
+        userId
+      );
+
+      if (!user) {
+        throw new Error("User not found");
+      }
+
+      const classEnrollment = user.classEnrollment.map((lesson) => {
+        return lesson.toString();
+      });
+      if (!classEnrollment.includes(courseId.toString())) {
+        throw new Error("permission denied");
+      }
+      const infoComment = {
+        userId: new ObjectId(userId),
+        content: comment,
+        time: new Date(),
+      };
+
+      const result = await commentRepositories.addComment(
+        courseId,
+        infoComment
+      );
+
+      responseApi(res, 200, {
+        success: true,
+        response: {
+          message: "Created Cource!",
+          data: result,
         },
       });
     } catch (error) {
