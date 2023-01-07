@@ -79,7 +79,7 @@ const unitController = {
       if (!unit) {
         throw new Error("Course not found");
       }
-      if (idUser != unit.author && idUser != ROLE_USER.AD) {
+      if (idUser != unit.author.toString() && idUser != ROLE_USER.AD) {
         throw new Error("Permission denied");
       }
       const result = await unitRepositories.delete(id);

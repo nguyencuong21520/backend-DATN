@@ -332,5 +332,12 @@ const courceRepositories = {
     client.close();
     return result;
   },
+  delete: async (id: string) => {
+    const client = await getClient();
+    const collection = client.db(DB).collection(DbCollections.course);
+    const result = await collection.deleteOne({ _id: new ObjectId(id) });
+    client.close();
+    return result;
+  },
 };
 export default courceRepositories;

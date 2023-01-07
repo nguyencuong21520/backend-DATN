@@ -365,5 +365,37 @@ const courceController = {
       });
     }
   },
+  delete: async (req: AuthRequest, res: Response) => {
+    try {
+      const id = req.params.id;
+      const idUser = req.authUser.id;
+
+      const course = await courceRepositories.getDrawCourse(id);
+      if (!course) {
+        throw new Error("Course not found");
+      }
+
+      if (idUser != course.author.toString() && idUser != ROLE_USER.AD) {
+        throw new Error("Permission denied");
+      }
+
+      const result = await courceRepositories.delete(id);
+
+      responseApi(res, 200, {
+        success: true,
+        response: {
+          message: "Delete Course success!",
+          data: result,
+        },
+      });
+    } catch (error) {
+      responseApi(res, 500, {
+        success: false,
+        response: {
+          message: error.message,
+        },
+      });
+    }
+  },
 };
 export default courceController;

@@ -83,7 +83,7 @@ const lessonController = {
       if (!lesson) {
         throw new Error("Course not found");
       }
-      if (idUser != lesson.author && idUser != ROLE_USER.AD) {
+      if (idUser != lesson.author.toString() && idUser != ROLE_USER.AD) {
         throw new Error("Permission denied");
       }
       const result = await lessonRepositories.delete(id);

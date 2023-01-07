@@ -13,6 +13,8 @@ router.put("/accept/:id", auth, courceController.acceptEnroll);
 router.put("/addComment/:id", auth, courceController.addComment);
 router.put("/remove/:id", auth, courceController.removenroll);
 router.put("/addEnroll/:id", auth, courceController.addEnroll);
+router.delete("/delete/:id", auth, courceController.delete);
+
 
 
 
