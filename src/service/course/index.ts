@@ -80,7 +80,6 @@ const courseService = {
       throw new Error("Fail to create course!");
     }
   },
-
   createUnit: async (idCourse: string, idAuthor: string, info: Obj) => {
     try {
       const { unitName } = info;
@@ -223,6 +222,29 @@ const courseService = {
           },
         ];
       }
+    } catch (error) {
+      if (error) {
+        throw new Error(error.message);
+      }
+      throw new Error("Fail to get course!");
+    }
+  },
+  GetCourseByIdVL: async (idCoure: string) => {
+    try {
+      let cmt = [] as any[];
+      const course = await courceRepositories.getAll(false, idCoure);
+      const comment = await commentRepositories.getAll(idCoure);
+
+      if (!course) {
+        throw new Error(" course not found");
+      }
+      if (!comment) {
+        throw new Error(" comment not found");
+      } else {
+        cmt = comment;
+      }
+
+      return [{ ...course[0], comment: cmt[0] }];
     } catch (error) {
       if (error) {
         throw new Error(error.message);

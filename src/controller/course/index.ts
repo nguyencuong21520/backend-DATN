@@ -156,7 +156,7 @@ const courceController = {
         throw new Error("Missing course id");
       }
 
-      const result = await courceRepositories.getAll(false, courseId);
+      const result = await courseService.GetCourseByIdVL(courseId);
 
       responseApi(res, 200, {
         success: true,
