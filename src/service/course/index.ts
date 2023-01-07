@@ -235,6 +235,7 @@ const courseService = {
       const course = await courceRepositories.getAll(false, idCoure);
       const comment = await commentRepositories.getAll(idCoure);
 
+
       if (!course) {
         throw new Error(" course not found");
       }

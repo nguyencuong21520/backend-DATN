@@ -70,7 +70,7 @@ const commentRepositories = {
       .aggregate([
         {
           $match: {
-            idComment: id,
+            idComment: new ObjectId(id),
           },
         },
         ...pipeline,
