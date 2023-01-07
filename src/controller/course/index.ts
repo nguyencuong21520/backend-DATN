@@ -148,6 +148,32 @@ const courceController = {
       });
     }
   },
+  getCourseVLById: async (req: AuthRequest, res: Response) => {
+    try {
+      const courseId = req.params.id;
+
+      if (!courseId) {
+        throw new Error("Missing course id");
+      }
+
+      const result = await courceRepositories.getAll(false, courseId);
+
+      responseApi(res, 200, {
+        success: true,
+        response: {
+          message: "Success!",
+          data: result,
+        },
+      });
+    } catch (error) {
+      responseApi(res, 500, {
+        success: false,
+        response: {
+          message: error.message,
+        },
+      });
+    }
+  },
   enroll: async (req: AuthRequest, res: Response) => {
     try {
       const userId = req.authUser.id;
