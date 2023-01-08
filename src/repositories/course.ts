@@ -68,10 +68,10 @@ const optionPipeline = (option) => {
         status: {
           $first: "$status",
         },
-        enroll:{
+        enroll: {
           $first: "$enroll",
         },
-        major:{
+        major: {
           $first: "$major",
         },
         lastModified: {
@@ -115,7 +115,7 @@ const optionPipeline = (option) => {
           img: 1,
           email: 1,
           phone: 1,
-          createTime:1,
+          createTime: 1,
           role: 1,
           status: 1,
         },
@@ -142,7 +142,7 @@ const optionPipeline = (option) => {
         comment: 1,
         createTime: 1,
         status: 1,
-        enroll:1,
+        enroll: 1,
         major: 1,
         lastModified: 1,
       },
@@ -213,10 +213,10 @@ const optionPipeline = (option) => {
         status: {
           $first: "$status",
         },
-        enroll:{
+        enroll: {
           $first: "$enroll",
         },
-        major:{
+        major: {
           $first: "$major",
         },
         lastModified: {
@@ -269,7 +269,7 @@ const optionPipeline = (option) => {
         major: 1,
         createTime: 1,
         status: 1,
-        enroll:1,
+        enroll: 1,
         lastModified: 1,
       },
     },
@@ -308,6 +308,34 @@ const courceRepositories = {
       client.close();
       return result;
     }
+  },
+  getCourseDashboard: async () => {
+    const client = await getClient();
+    const collection = client.db(DB).collection(DbCollections.course);
+
+    const result = await collection
+      .aggregate([
+        {
+          $project: {
+            _id: 1,
+            major: 1,
+            level: 1,
+            createTime: 1,
+            status: 1,
+          },
+        },
+        {
+          $lookup: {
+            from: "enroll",
+            localField: "_id",
+            foreignField: "idClass",
+            as: "student",
+          },
+        },
+      ])
+      .toArray();
+    client.close();
+    return result;
   },
   getDrawCourse: async (id: string) => {
     const client = await getClient();
