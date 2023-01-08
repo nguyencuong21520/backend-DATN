@@ -8,6 +8,7 @@ router.post("/create", userMiddleWare.create, userController.createUser);
 router.post("/login", userMiddleWare.login, userController.login);
 router.get("/me", auth, userController.myInformation);
 router.get("/", auth, userController.listUser);
+router.get("/dashboard", auth, userController.dashboard);
 
 router.put("/update/:id", auth, userController.updateInformation);
 router.put("/addLessonDone/", auth, userController.addLessonDone);

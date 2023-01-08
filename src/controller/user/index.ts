@@ -6,6 +6,7 @@ import { ROLE_USER, STATUS_USER } from "../../Enum/";
 
 import userRepositories, { OptionFind } from "../../repositories/user";
 import { ObjectId } from "bson";
+import dashboardService from "../../service/dashboard/dashboard";
 
 const userController = {
   createUser: async (req: Request, res: Response) => {
@@ -119,7 +120,7 @@ const userController = {
     try {
       const username = req.query.username as string;
       const pageIndex = parseInt(req.query.page as string) || 1;
-      const quantityPerPage = parseInt(req.query.amount as string) || 10;
+      const quantityPerPage = parseInt(req.query.amount as string) || 20;
 
       const roleAuth = req.authUser.role;
 
@@ -242,6 +243,32 @@ const userController = {
       } else {
         throw new Error("Permission denied");
       }
+    } catch (error) {
+      responseApi(res, 502, {
+        success: false,
+        response: {
+          message: error.message,
+        },
+      });
+    }
+  },
+  dashboard: async (req: AuthRequest, res: Response) => {
+    try {
+      const roleAuth = req.authUser.role;
+
+      if (roleAuth != ROLE_USER.AD) {
+        throw new Error("Permission denied");
+      }
+
+      const result = await dashboardService.getDashboard()
+
+      responseApi(res, 200, {
+        success: true,
+        response: {
+          message: "Get information success!",
+          data: result,
+        },
+      });
     } catch (error) {
       responseApi(res, 502, {
         success: false,

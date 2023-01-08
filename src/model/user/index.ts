@@ -15,6 +15,7 @@ class User {
   public img: string = null;
   public email: string = null;
   public phone: string = null;
+  public createTime: Date = null;
   public classEnrollment: Array<String> = [];
   public classWaiting: Array<String> = [];
   public lessonDone: Array<String> = [];
@@ -23,7 +24,8 @@ class User {
     password: string,
     img: string,
     email: string,
-    phone: string
+    phone: string,
+    createTime: Date
   ) {
     this.username = username;
     this.password = password;
@@ -31,6 +33,7 @@ class User {
     this.img = img;
     this.email = email;
     this.phone = phone;
+    this.createTime = createTime;
   }
   static mapDataFromDocument(document: Obj) {
     const user = new User(
@@ -38,7 +41,8 @@ class User {
       document.password,
       document.img,
       document.email,
-      document.phone
+      document.phone,
+      document.createTime
     );
     user._id = document._id;
     user.status = document.status;
@@ -46,7 +50,7 @@ class User {
     user.salt = document.salt;
     user.classEnrollment = document.classEnrollment;
     user.classWaiting = document.classWaiting;
-    user.lessonDone =document.lessonDone;
+    user.lessonDone = document.lessonDone;
     return user;
   }
   static createUser(
@@ -56,7 +60,7 @@ class User {
     email: string,
     phone: string
   ) {
-    const user = new User(username, password, img, email, phone);
+    const user = new User(username, password, img, email, phone, new Date());
     return user;
   }
   generateToken() {

@@ -66,6 +66,24 @@ const userRepositories = {
     client.close();
     return { data: result, quantity: result.length };
   },
+  getUsersDashboard: async () => {
+    const client = await getClient();
+    const collection = client.db(DB).collection(DbCollections.user);
+
+    const result = await collection
+      .aggregate([
+        {
+          $project: {
+            _id: 1,
+            role: 1,
+            createTime: 1,
+          },
+        },
+      ])
+      .toArray();
+    client.close();
+    return result;
+  },
   updateUserAdmin: async (id: string, data: User) => {
     const client = await getClient();
     const collection = client.db(DB).collection(DbCollections.user);

@@ -115,6 +115,7 @@ const optionPipeline = (option) => {
           img: 1,
           email: 1,
           phone: 1,
+          createTime:1,
           role: 1,
           status: 1,
         },
