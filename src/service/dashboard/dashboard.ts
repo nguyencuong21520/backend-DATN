@@ -15,6 +15,17 @@ const groupCourseByMajor = (course) => {
   });
   return groupCourse;
 };
+const groupCourseByLV = (course) => {
+  const groupCourse = {};
+  course.forEach((c: Obj) => {
+    if (!groupCourse[c.level]) {
+      groupCourse[c.level] = [c];
+    } else {
+      groupCourse[c.level].push(c);
+    }
+  });
+  return groupCourse;
+};
 const countCourseByMajor = (course) => {
   const counts = {};
   course.forEach((c: Obj) => {
@@ -55,8 +66,11 @@ const dashboardService = {
         ADVANCED: [],
         INTENSVIVE: [],
       };
-      newCourse.forEach((e: Obj) => {
-        courseByLV[e.level] = countCourseByMajor(newCourse);
+
+
+      const courseByLV_ = groupCourseByLV(newCourse);
+      Object.keys(courseByLV_).forEach((key) => {
+        courseByLV[key] = countCourseByMajor(courseByLV_[key]);
       });
 
       return {
