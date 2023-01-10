@@ -125,10 +125,10 @@ const courceController = {
       }
 
       let result = null;
-      if (roleAuth === ROLE_USER.AD) {
+      if (roleAuth === ROLE_USER.AD || roleAuth === ROLE_USER.TC) {
         result = await courseService.GetCourseById(roleId, courseId, true);
       }
-      if (roleAuth === ROLE_USER.ST || roleAuth === ROLE_USER.TC) {
+      if (roleAuth === ROLE_USER.ST) {
         result = await courseService.GetCourseById(roleId, courseId, false);
       }
 
