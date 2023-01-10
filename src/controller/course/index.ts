@@ -369,13 +369,14 @@ const courceController = {
     try {
       const id = req.params.id;
       const idUser = req.authUser.id;
+      const userRole = req.authUser.role;
 
       const course = await courceRepositories.getDrawCourse(id);
       if (!course) {
         throw new Error("Course not found");
       }
 
-      if (idUser != course.author.toString() && idUser != ROLE_USER.AD) {
+      if (idUser != course.author.toString() && userRole != ROLE_USER.AD) {
         throw new Error("Permission denied");
       }
 
