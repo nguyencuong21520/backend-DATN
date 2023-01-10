@@ -15,11 +15,11 @@ const chatRepositories = {
     const collection = client.db(DB).collection(DbCollections.chat);
     const result = await collection
       .aggregate([
-        {
-          $match: {
-            me: new ObjectId(id),
-          },
-        },
+        // {
+        //   $match: {
+        //     me: new ObjectId(id),
+        //   },
+        // },
         {
           $lookup: {
             from: "user",
