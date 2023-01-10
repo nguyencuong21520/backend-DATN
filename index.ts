@@ -12,8 +12,16 @@ const io = socketIo(sever, {
   },
 });
 
-io.on("connection", () => {
-  console.log("connection hello");
+io.on("connection", (socket) => {
+  socket.on("join", () => {
+    socket.join("alo");
+  });
+  socket.on("quit", () => {
+    socket.leave("alo");
+  });
+  socket.on("sentMsg", (content) => {
+    io.to("alo").emit("newMsg", content);
+  });
 });
 
 config();
